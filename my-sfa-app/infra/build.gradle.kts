@@ -1,0 +1,2 @@
+dependencies {
+    implementation(project(":core"))\n    \n    implementation(\"org.springframework.boot:spring-boot-starter-data-jpa\")\n    implementation(\"org.flywaydb:flyway-core\")\n    implementation(\"org.flywaydb:flyway-database-postgresql\")\n    \n    runtimeOnly(\"org.postgresql:postgresql\")\n    \n    // Testing\n    testImplementation(\"org.testcontainers:postgresql\")\n    testImplementation(\"org.springframework.boot:spring-boot-testcontainers\")\n}

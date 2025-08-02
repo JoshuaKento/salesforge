@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    
+  flyway:
+    enabled: false
+
+app:
+  jwt:
+    secret: testSecretKey123456789012345678901234567890
+    expiration: 3600000 # 1 hour for tests
+
+logging:
+  level:
+    com.example: DEBUG
+    org.springframework.security: DEBUG
+    org.testcontainers: INFO
