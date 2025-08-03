@@ -1,2 +1,23 @@
+// Disable Spring Boot JAR generation for library modules
+tasks.bootJar {
+    enabled = false
+}
+
+tasks.jar {
+    enabled = true
+    archiveClassifier = ""
+}
+
 dependencies {
-    implementation(project(":core"))\n    \n    implementation(\"org.springframework.boot:spring-boot-starter-data-jpa\")\n    implementation(\"org.flywaydb:flyway-core\")\n    implementation(\"org.flywaydb:flyway-database-postgresql\")\n    \n    runtimeOnly(\"org.postgresql:postgresql\")\n    \n    // Testing\n    testImplementation(\"org.testcontainers:postgresql\")\n    testImplementation(\"org.springframework.boot:spring-boot-testcontainers\")\n}
+    implementation(project(":core"))
+    
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
+    
+    runtimeOnly("org.postgresql:postgresql")
+    
+    // Testing
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+}

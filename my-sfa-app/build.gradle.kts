@@ -1,3 +1,5 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+
 plugins {
     java
     id("org.springframework.boot") version "3.3.5" apply false
@@ -15,15 +17,16 @@ allprojects {
 
 subprojects {
     apply(plugin = "java")
+    apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
     
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
     
-    dependencyManagement {
+    configure<DependencyManagementExtension> {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:3.3.5")
             mavenBom("org.testcontainers:testcontainers-bom:1.19.3")
