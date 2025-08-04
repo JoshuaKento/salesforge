@@ -4,17 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SalesForge is a Sales Force Automation (SFA) mini-application built with Spring Boot and Java 17. It provides CRM functionality for managing leads, accounts, contacts, opportunities, and activities in a sales pipeline.
+SalesForge is a Sales Force Automation (SFA) mini-application built with Spring Boot and Java 21. It provides CRM functionality for managing leads, accounts, contacts, opportunities, and activities in a sales pipeline.
 
 ## Technology Stack
 
-- **Backend**: Spring Boot 3.5.4 with Java 17
-- **Frontend**: Vaadin 24.8.3 for UI components
+- **Backend**: Spring Boot 3.3.5 with Java 21
 - **Additional Frameworks**: 
-  - Netflix DGS (GraphQL)
-  - Spring Security with OAuth2
+  - Spring Security with JWT
   - Spring Data JPA
-  - HTMX integration
+  - Spring Web (REST APIs)
 - **Database**: PostgreSQL (runtime dependency)
 - **Build Tool**: Gradle with Kotlin DSL
 
@@ -36,21 +34,20 @@ SalesForge is a Sales Force Automation (SFA) mini-application built with Spring 
 ```
 
 ### Development Workflow
-- The application runs on Spring Boot with Vaadin UI
-- Vaadin launcher is configured to auto-open browser (`vaadin.launch-browser=true`)
-- Application name is set to `sales-forge`
+- The application runs on Spring Boot with REST APIs
+- Application name is set to `my-sfa-app`
+- Default port: 8080
 
 ## Project Structure
 
 ### Package Structure
-- Main package: `sales.forge.sales.forge`
-- Note: The original package name 'sales forge.sales forge' was invalid and corrected
+- Main package: `com.example`
+- Modules: core, security, infra, web
 
 ### Key Directories
 - `src/main/java/` - Java source code
 - `src/main/resources/` - Configuration and resources
-  - `application.properties` - Main configuration
-  - `graphql/` - GraphQL schema definitions (empty currently)
+  - `application.yml` - Main configuration
   - `static/` - Static web assets
   - `templates/` - UI templates
 - `src/test/java/` - Test files
@@ -86,23 +83,22 @@ The application is designed with REST API endpoints following `/api/v1/` pattern
 
 - JWT-based authentication
 - Role-based access control (ADMIN, MANAGER, SALES_REP)
-- OAuth2 integration (client, authorization server, resource server)
 - Spring Security configuration
-- LDAP authentication support
+- Basic authentication endpoints
 
 ## Development Notes
 
 - Uses Spring Boot auto-configuration
-- Vaadin integration for modern web UI
-- GraphQL support via Netflix DGS
-- Multiple session management options (MongoDB, Redis, Hazelcast, JDBC)
-- Comprehensive validation and HATEOAS support
+- Multi-module architecture (core, security, infra, web)
+- PostgreSQL database with Flyway migrations
+- Testcontainers for integration testing
+- Lombok for reducing boilerplate code
 
 ## Testing
 
 - Uses JUnit 5 platform
 - Spring Boot Test integration
-- GraphQL testing support
+- Testcontainers for database testing
 - Security testing capabilities
 
 ## Documentation
