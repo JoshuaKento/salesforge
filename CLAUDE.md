@@ -8,8 +8,8 @@ SalesForge is a Sales Force Automation (SFA) mini-application built with Spring 
 
 ## Technology Stack
 
-- **Backend**: Spring Boot 3.5.4 with Java 17
-- **Frontend**: Vaadin 24.8.3 for UI components
+- **Backend**: Spring Boot 3.3.5 with Java 17
+- **Frontend**: REST API with JSON responses (Vaadin optional)
 - **Additional Frameworks**: 
   - Netflix DGS (GraphQL)
   - Spring Security with OAuth2
@@ -43,8 +43,8 @@ SalesForge is a Sales Force Automation (SFA) mini-application built with Spring 
 ## Project Structure
 
 ### Package Structure
-- Main package: `sales.forge.sales.forge`
-- Note: The original package name 'sales forge.sales forge' was invalid and corrected
+- Main package: `com.example`
+- Note: Uses standard reverse domain naming convention with example placeholder
 
 ### Key Directories
 - `src/main/java/` - Java source code

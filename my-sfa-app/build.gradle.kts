@@ -21,9 +21,8 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     
     java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
-        }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     
     configure<DependencyManagementExtension> {
@@ -35,8 +34,8 @@ subprojects {
     
     dependencies {
         // Common dependencies across all modules
-        compileOnly("org.projectlombok:lombok")
-        annotationProcessor("org.projectlombok:lombok")
+        compileOnly("org.projectlombok:lombok:1.18.38")
+        annotationProcessor("org.projectlombok:lombok:1.18.38")
         
         // Testing
         testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -46,5 +45,11 @@ subprojects {
     
     tasks.withType<Test> {
         useJUnitPlatform()
+    }
+    
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.addAll(listOf(
+            "-parameters"
+        ))
     }
 }

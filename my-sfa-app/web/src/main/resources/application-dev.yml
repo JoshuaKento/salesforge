@@ -1,0 +1,52 @@
+# Development Profile Configuration
+# Use this profile for local development with: --spring.profiles.active=dev
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update  # Allow schema updates in development
+    show-sql: true      # Show SQL queries in development
+    properties:
+      hibernate:
+        format_sql: true  # Format SQL for readability
+
+  # Development database (can be overridden with environment variables)
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/sfa_dev_db}
+    username: ${DB_USERNAME:sfa_dev_user}
+    password: ${DB_PASSWORD:sfa_dev_password}
+
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false    # Allow non-HTTPS in development
+        
+app:
+  jwt:
+    # Development JWT secret (still recommend using environment variable)
+    secret: ${JWT_SECRET:devSecretForLocalDevelopmentOnly123456789012345678901234567890}
+    expiration: ${JWT_EXPIRATION:3600000}  # 1 hour for development
+
+# Development logging - verbose for debugging
+logging:
+  level:
+    com.example: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.transaction: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Expose all actuator endpoints in development
+  endpoint:
+    health:
+      show-details: always
+  security:
+    enabled: false  # Disable actuator security in development

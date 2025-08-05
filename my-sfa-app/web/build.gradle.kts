@@ -13,6 +13,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     
+    // Vaadin UI framework - commented out as this is primarily a REST API application
+    // implementation("com.vaadin:vaadin-spring-boot-starter:24.8.3")
+    
+    // PostgreSQL driver
+    runtimeOnly("org.postgresql:postgresql")
+    
     // OpenAPI/Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     
