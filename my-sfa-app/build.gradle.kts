@@ -21,8 +21,15 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     
     java {
+        // Use source/target compatibility for broad Java version support
+        // This works with Java 17+ (including Java 21, 24, etc.)
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        
+        // Optionally use toolchain if available, but don't fail if not found
+        // toolchain {
+        //     languageVersion = JavaLanguageVersion.of(21)
+        // }
     }
     
     configure<DependencyManagementExtension> {
