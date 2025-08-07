@@ -10,10 +10,12 @@ tasks.jar {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":infra")) // Add infra dependency to access repositories
     
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa") // Add JPA for repository access
     implementation("org.springframework:spring-tx")
     
     // JWT
