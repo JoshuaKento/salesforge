@@ -1,6 +1,7 @@
 package com.example.security.service;
 
 import com.example.core.domain.User;
+import com.example.infra.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,19 +18,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     
-    // Note: This will be injected when infra module is set up
-    // private final UserRepository userRepository;
+    private final UserRepository userRepository;
     
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // TODO: Implement with actual repository when infra module is ready
-        // User user = userRepository.findByEmail(email)
-        //         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
-        // 
-        // return UserPrincipal.create(user);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
         
-        throw new UnsupportedOperationException("UserRepository not yet implemented");
+        return UserPrincipal.create(user);
     }
     
     public static class UserPrincipal implements UserDetails {

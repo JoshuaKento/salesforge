@@ -1,14 +1,30 @@
 # Multi-stage build for Spring Boot application
-FROM openjdk:21-jre-slim as builder
+FROM openjdk:21-jdk-slim as builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy the built JAR file
-COPY web/build/libs/*.jar app.jar
+# Copy gradle wrapper and build files
+COPY gradle gradle
+COPY gradlew gradlew.bat gradle.properties settings.gradle.kts ./
+COPY */build.gradle.kts ./
+COPY core/build.gradle.kts core/
+COPY infra/build.gradle.kts infra/
+COPY security/build.gradle.kts security/
+COPY web/build.gradle.kts web/
+
+# Copy source code
+COPY core/src core/src
+COPY infra/src infra/src
+COPY security/src security/src
+COPY web/src web/src
+
+# Make gradlew executable and build
+RUN chmod +x gradlew
+RUN ./gradlew :web:build -x test
 
 # Extract layers for better caching
-RUN java -Djarmode=layertools -jar app.jar extract
+RUN java -Djarmode=layertools -jar web/build/libs/*.jar extract
 
 # Final stage
 FROM openjdk:21-jre-slim

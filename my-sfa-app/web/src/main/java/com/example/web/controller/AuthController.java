@@ -6,6 +6,8 @@ import com.example.web.dto.LoginRequest;
 import com.example.web.dto.LoginResponse;
 import com.example.web.dto.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Authentication", description = "Authentication operations")
+@Tag(name = "Authentication", description = "Authentication operations for user management")
 public class AuthController {
 
     private final AuthService authService;
@@ -32,7 +34,13 @@ public class AuthController {
      * User registration endpoint
      */
     @PostMapping("/register")
-    @Operation(summary = "Register a new user")
+    @Operation(summary = "Register a new user", 
+               description = "Creates a new user account with email, password and basic information")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "User successfully registered"),
+        @ApiResponse(responseCode = "400", description = "Invalid input or email already exists"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         log.info("Registration attempt for email: {}", request.getEmail());
         
@@ -74,7 +82,14 @@ public class AuthController {
      * User login endpoint
      */
     @PostMapping("/login")
-    @Operation(summary = "User login")
+    @Operation(summary = "User login", 
+               description = "Authenticates user credentials and returns JWT token")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login successful, JWT token returned"),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials"),
+        @ApiResponse(responseCode = "400", description = "Invalid input format"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         log.info("Login attempt for email: {}", request.getEmail());
         
@@ -119,7 +134,11 @@ public class AuthController {
      * Logout endpoint
      */
     @PostMapping("/logout")
-    @Operation(summary = "User logout")
+    @Operation(summary = "User logout", 
+               description = "Clears user session and invalidates current authentication context")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Logout successful")
+    })
     public ResponseEntity<?> logout() {
         SecurityContextHolder.clearContext();
         Map<String, String> response = new HashMap<>();
@@ -131,12 +150,48 @@ public class AuthController {
      * Health check for auth service
      */
     @GetMapping("/health")
-    @Operation(summary = "Authentication service health check")
+    @Operation(summary = "Authentication service health check", 
+               description = "Returns the current status of the authentication service")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Service is healthy")
+    })
     public ResponseEntity<?> health() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "UP");
         response.put("service", "Authentication Service");
         response.put("timestamp", LocalDateTime.now());
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Test login endpoint for debugging
+     */
+    @PostMapping("/test-login")
+    public ResponseEntity<?> testLogin(@RequestBody LoginRequest request) {
+        log.info("Test login attempt for email: {}", request.getEmail());
+        
+        try {
+            // Check if user exists
+            User user = authService.findUserByEmail(request.getEmail())
+                    .orElse(null);
+            
+            Map<String, Object> response = new HashMap<>();
+            if (user != null) {
+                response.put("userFound", true);
+                response.put("email", user.getEmail());
+                response.put("active", user.getActive());
+                response.put("role", user.getRole());
+                response.put("hasPassword", user.getPassword() != null);
+            } else {
+                response.put("userFound", false);
+            }
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.ok(response);
+        }
     }
 }

@@ -58,6 +58,22 @@ management:
   security:
     enabled: true
 
+# OpenAPI/Swagger Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+  show-actuator: true
+  info:
+    title: SalesForge API
+    description: Sales Force Automation CRM API
+    version: 1.0.0
+  servers:
+    - url: http://localhost:8080
+      description: Development server
+
 # Production logging - minimal and secure
 logging:
   level:
