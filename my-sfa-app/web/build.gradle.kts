@@ -19,6 +19,9 @@ dependencies {
     // PostgreSQL driver
     runtimeOnly("org.postgresql:postgresql")
     
+    // H2 for testing
+    runtimeOnly("com.h2database:h2")
+    
     // OpenAPI/Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     

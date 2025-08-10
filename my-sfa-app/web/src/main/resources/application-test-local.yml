@@ -1,0 +1,26 @@
+# Local Test Profile - No Database Required
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+    
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      
+  flyway:
+    enabled: false  # Disable Flyway for H2
+
+logging:
+  level:
+    com.example: DEBUG
+    org.springframework.security: DEBUG

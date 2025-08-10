@@ -3,16 +3,14 @@ services:
   - type: web
     name: salesforge-api
     runtime: java
-    buildCommand: cd my-sfa-app && ./gradlew build -x test
-    startCommand: java -jar my-sfa-app/web/build/libs/web-*.jar
+    buildCommand: ./scripts/render-build.sh
+    startCommand: java -Dserver.port=$PORT -jar my-sfa-app/web/build/libs/web-*.jar
     plan: free
     env: production
     healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
-      - key: SERVER_PORT
-        value: 10000
       - key: DB_URL
         fromDatabase:
           name: salesforge-db
