@@ -28,43 +28,13 @@ services:
       - key: JWT_EXPIRATION
         value: 86400000
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
-        value: validate
+        value: create
       - key: SPRING_FLYWAY_ENABLED
-        value: true
+        value: false
     buildFilter:
       paths:
         - my-sfa-app/**
     
-  # React Frontend (Static Site)
-  - type: static
-    name: salesforge-ui
-    runtime: node
-    buildCommand: cd frontend/salesforge-ui && npm ci && npm run build
-    staticPublishPath: ./frontend/salesforge-ui/build
-    plan: free
-    env: production
-    envVars:
-      - key: REACT_APP_API_BASE_URL
-        value: https://salesforge-api.onrender.com/api/v1
-      - key: REACT_APP_ENV
-        value: production
-    buildFilter:
-      paths:
-        - frontend/**
-    headers:
-      - path: /*
-        name: X-Frame-Options
-        value: DENY
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-      - path: /*
-        name: Referrer-Policy
-        value: strict-origin-when-cross-origin
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
 
 databases:
   # PostgreSQL Database
@@ -73,13 +43,3 @@ databases:
     user: salesforge_user
     plan: free
 
-# Pre-deploy hooks for database migration
-preDeployHooks:
-  - type: command
-    name: flyway-migrate
-    command: cd my-sfa-app && java -cp "build/libs/*:build/dependencies/*" org.flywaydb.commandline.Main migrate
-    env:
-      FLYWAY_URL: $DB_URL
-      FLYWAY_USER: $DB_USERNAME
-      FLYWAY_PASSWORD: $DB_PASSWORD
-      FLYWAY_LOCATIONS: classpath:db/migration
