@@ -23,9 +23,17 @@ public class DatabaseConfig {
             // Convert Render's DATABASE_URL format to JDBC URL
             try {
                 URI uri = new URI(databaseUrl);
-                String jdbcUrl = "jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + uri.getPath();
-                String username = uri.getUserInfo().split(":")[0];
-                String password = uri.getUserInfo().split(":")[1];
+                
+                // Handle port - use default PostgreSQL port if not specified
+                int port = uri.getPort() == -1 ? 5432 : uri.getPort();
+                
+                String jdbcUrl = "jdbc:postgresql://" + uri.getHost() + ":" + port + uri.getPath();
+                String[] userInfo = uri.getUserInfo().split(":");
+                String username = userInfo[0];
+                String password = userInfo[1];
+                
+                System.out.println("Parsed DATABASE_URL: " + jdbcUrl);
+                System.out.println("Username: " + username);
                 
                 return DataSourceBuilder.create()
                     .driverClassName("org.postgresql.Driver")
@@ -34,6 +42,7 @@ public class DatabaseConfig {
                     .password(password)
                     .build();
             } catch (Exception e) {
+                System.err.println("Failed to parse DATABASE_URL: " + databaseUrl);
                 throw new RuntimeException("Failed to parse DATABASE_URL: " + databaseUrl, e);
             }
         }
