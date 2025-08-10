@@ -2,9 +2,9 @@ services:
   # Spring Boot Backend API
   - type: web
     name: salesforge-api
-    runtime: java
-    buildCommand: ./scripts/render-build.sh
-    startCommand: java -Dserver.port=$PORT -jar my-sfa-app/web/build/libs/web-*.jar
+    runtime: docker
+    dockerfilePath: ./my-sfa-app/Dockerfile
+    dockerContext: ./my-sfa-app
     plan: free
     env: production
     healthCheckPath: /actuator/health
