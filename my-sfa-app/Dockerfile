@@ -1,5 +1,5 @@
 # Multi-stage build for Spring Boot application
-FROM openjdk:21-jdk-slim as builder
+FROM eclipse-temurin:21-jdk-alpine as builder
 
 # Set working directory
 WORKDIR /app
@@ -27,16 +27,14 @@ RUN ./gradlew :web:build -x test
 RUN java -Djarmode=layertools -jar web/build/libs/*.jar extract
 
 # Final stage
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre-alpine
 
 # Install necessary packages and create non-root user
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apk add --no-cache \
         curl \
         ca-certificates && \
-    rm -rf /var/lib/apt/lists/* && \
-    groupadd -r appuser && \
-    useradd -r -g appuser appuser
+    addgroup -S appuser && \
+    adduser -S appuser -G appuser
 
 # Set working directory
 WORKDIR /app
