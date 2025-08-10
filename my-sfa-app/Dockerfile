@@ -21,7 +21,10 @@ COPY web/src web/src
 
 # Make gradlew executable and build
 RUN chmod +x gradlew
-RUN ./gradlew :web:build -x test
+# Create Docker-specific gradle.properties
+RUN echo "org.gradle.jvmargs=-Xmx1024m -XX:MaxMetaspaceSize=256m" > gradle.properties
+RUN echo "org.gradle.java.installations.auto-detect=true" >> gradle.properties
+RUN ./gradlew :web:build -x test --no-daemon
 
 # Extract layers for better caching
 RUN java -Djarmode=layertools -jar web/build/libs/*.jar extract
