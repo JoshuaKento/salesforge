@@ -25,7 +25,7 @@ RUN echo "org.gradle.jvmargs=-Xmx1024m -XX:MaxMetaspaceSize=256m" > gradle.prope
 RUN echo "org.gradle.java.installations.auto-detect=true" >> gradle.properties
 RUN ./gradlew :web:build -x test --no-daemon
 
-# Extract layers for better caching
+# Extract layers for better caching (now only bootJar will exist)
 RUN java -Djarmode=layertools -jar web/build/libs/*.jar extract
 
 # Final stage

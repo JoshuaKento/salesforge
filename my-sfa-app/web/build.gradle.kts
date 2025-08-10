@@ -2,6 +2,12 @@ plugins {
     id("org.springframework.boot")
 }
 
+// Only create bootJar, not plain jar for the main application
+tasks.jar {
+    enabled = false
+    archiveClassifier = ""
+}
+
 dependencies {
     implementation(project(":core"))
     implementation(project(":security"))
