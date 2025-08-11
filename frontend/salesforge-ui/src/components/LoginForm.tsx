@@ -31,8 +31,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     try {
       const response = await apiService.login(formData);
       
-      if (response.success && response.token) {
-        localStorage.setItem('auth_token', response.token);
+      if (response.accessToken) {
+        localStorage.setItem('auth_token', response.accessToken);
         localStorage.setItem('user_data', JSON.stringify({
           email: response.email,
           firstName: response.firstName,

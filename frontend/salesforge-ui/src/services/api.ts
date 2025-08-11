@@ -29,8 +29,8 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  success: boolean;
-  token: string;
+  accessToken: string;
+  tokenType: string;
   email: string;
   firstName: string;
   lastName: string;
