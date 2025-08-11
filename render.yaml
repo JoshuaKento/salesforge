@@ -31,10 +31,28 @@ services:
         value: create
       - key: SPRING_FLYWAY_ENABLED
         value: false
+      - key: APP_CORS_ALLOWED_ORIGINS
+        value: https://salesforge-ui.onrender.com
     buildFilter:
       paths:
         - my-sfa-app/**
-    
+
+  # React Frontend
+  - type: web
+    name: salesforge-ui
+    runtime: node
+    buildCommand: cd frontend/salesforge-ui && npm ci && npm run build
+    startCommand: cd frontend/salesforge-ui && npx serve -s build -p $PORT
+    plan: free
+    env: production
+    envVars:
+      - key: REACT_APP_API_BASE_URL
+        value: https://salesforge-api.onrender.com/api/v1
+      - key: REACT_APP_ENV
+        value: production
+    buildFilter:
+      paths:
+        - frontend/**
 
 databases:
   # PostgreSQL Database

@@ -35,8 +35,8 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     
-    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:8080}")
-    private String[] allowedOrigins;
+    @Value("${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:8080,https://salesforge-ui.onrender.com}")
+    private String allowedOrigins;
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins));
+        configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
