@@ -1,7 +1,9 @@
 package com.example.web.controller;
 
 import com.example.core.domain.Lead;
+import com.example.core.domain.User;
 import com.example.infra.repository.LeadRepository;
+import com.example.security.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,6 +37,7 @@ import java.time.LocalDateTime;
 public class LeadController {
     
     private final LeadRepository leadRepository;
+    private final AuthService authService;
     
     @GetMapping
     @Operation(summary = "Get all leads", 
@@ -200,6 +205,13 @@ public class LeadController {
             if (lead.getSource() == null) {
                 lead.setSource(Lead.Source.OTHER);
             }
+            
+            // Set owner to current authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentUserEmail = authentication.getName();
+            User currentUser = authService.findUserByEmail(currentUserEmail)
+                .orElseThrow(() -> new RuntimeException("Current user not found"));
+            lead.setOwner(currentUser);
             
             Lead savedLead = leadRepository.save(lead);
             log.info("Successfully created lead with ID: {}", savedLead.getId());
